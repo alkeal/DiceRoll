@@ -14,7 +14,11 @@ struct ContentView: View {
     @State var diceTwo = 2
     
     
-    @State var sum = 0
+    @State var sumOne = 0
+    @State var sumTwo = 0
+    
+    // skapa en sheet när någon av tärningar har nått 21 och då ska den veta om det är sant eller falskt.
+    @State var WinSheet = false
     
     
     var body: some View {
@@ -27,16 +31,20 @@ struct ContentView: View {
         
         VStack {
             
+            Text("\(sumOne)")
+                  .font(.title)
+                  .foregroundColor(.green)
+                  .fontWeight(.bold)
+              Spacer()
+              
+              Text("\(sumTwo)")
+                    .font(.title)
+                    .foregroundColor(.green)
+                    .fontWeight(.bold)
+                Spacer()
             
-          Text("\(sum)")
-                .font(.title)
-                .foregroundColor(.green)
-                .fontWeight(.bold)
-            Spacer()
-            
-          
             HStack{
-                // skapar en tärning frå  structen diceview
+                // skapar en tärning från  structen diceview
                 // med dessa kan du skapa hur många tärningar du vill utan att ska flera image filer.
                 DiceView(n: diceOne)
                 DiceView(n: diceTwo)
@@ -67,13 +75,41 @@ struct ContentView: View {
         
     }
     // här slutar Zstack
+        
+        //  här skapar vi den sheet vi ser när man fått 21 poäng
+        .sheet(isPresented: $WinSheet, onDismiss: {
+            //sumTwo = 0
+            sumOne = 0
+        }, content: {
+            
+           // WinSheet(sumTwo: sumTwo)
+            DiceRoll.WinSheet(winSum: sumOne)
+            DiceRoll.WinSheet(winSum: sumTwo)
+            
+        })
+        
+        
+        
+        
+        
+        
 }
     func rollDice(){
         
         newValueOnDice()
+        // visar den specifika tärningens värde och adderar efter varje kast
+         sumOne += diceOne
+         sumTwo += diceTwo
+        // spelet avslutas när man nåt 21 eller högre och man blir skicka till den nya sidan/sheet
+        if (sumOne > 21){
+            WinSheet = true
+            
+        }
         
-         sum += diceOne
-         sum += diceTwo
+        if (sumTwo > 21){
+            
+            WinSheet = true
+        }
         
     }
 
@@ -101,6 +137,35 @@ struct DiceView : View {
             .aspectRatio( contentMode: .fit)
             .padding()
        
+    }
+    
+    
+}
+struct WinSheet : View {
+    
+    let winSum : Int
+    //let sumTwo : Int
+    
+    // En ny sida/sheet har en body
+    
+    var body : some View {
+          ZStack{
+            Color(red: 38/256, green: 108/256, blue: 59/256)
+                .ignoresSafeArea()
+            VStack{
+                Text("You won!")
+                    .foregroundColor(.white)
+                    .font(.title)
+                Text("\(winSum)")
+                    .foregroundColor(.red)
+                    .font(.title)
+             
+            }
+            
+        }
+        
+        
+        
     }
     
     
