@@ -33,21 +33,18 @@ struct ContentView: View {
         // MARK: - BODY
         VStack {
             HStack{
-            Text("Player one : \(sumOne)")
+            Text("Player 1 : \(sumOne)")
                   .font(.title)
                   .foregroundColor(.white)
                   .fontWeight(.semibold)
                   .padding()
-             
-                }
-            HStack{
-              Text("Player two : \(sumTwo)")
-                    .font(.title)
-                    .foregroundColor(.white)
-                    .fontWeight(.semibold)
-                    .padding()
                 
-                }
+                Text("Player 2 : \(sumTwo)")
+                      .font(.title)
+                      .foregroundColor(.white)
+                      .fontWeight(.semibold)
+                      .padding()                }
+       
             Spacer()
             HStack{
                 // skapar en tärning från  structen diceview
@@ -70,8 +67,8 @@ struct ContentView: View {
                 rollDiceTwo()
                 
             }, label: {
-                Text("Roll Dice Player One")
-                    .font(.largeTitle)
+                Text("Roll dice player 1")
+                    .font(.title)
                     .foregroundColor(Color.white)
                     .padding()
             })
@@ -89,13 +86,13 @@ struct ContentView: View {
                 rollDiceOne()
                 
             }, label: {
-                Text("Roll Dice Player Two")
-                    .font(.largeTitle)
+                Text("Roll dice player 2")
+                    .font(.title)
                     .foregroundColor(Color.white)
                     .padding()
             })
             // knappens design
-            .background(Color.green)
+            .background(Color.blue)
             .cornerRadius(15.0)
             Spacer()
         }
@@ -142,7 +139,7 @@ struct ContentView: View {
         if (sumOne > winningSum){
             WinSheetOne = true
             
-        } else {
+        } else if (sumOne < winningSum) {
             WinSheetOne = false
         }
         
@@ -159,7 +156,7 @@ struct ContentView: View {
         if (sumTwo > winningSum){
             
             WinSheetTwo = true
-        } else {
+        } else if (sumTwo < winningSum){
             WinSheetTwo = false
         }
         
@@ -189,10 +186,12 @@ struct DiceView : View {
     
     var body: some View {
         
-        Image(systemName: "die.face.\(n)")
+        Image(systemName: "die.face.\(n).fill")
             .resizable()
             .aspectRatio( contentMode: .fit)
             .padding()
+            .foregroundColor(.black)
+         
        
     }
     
@@ -277,8 +276,8 @@ struct WinSheetTwo : View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-       //ContentView()
-        WinSheetTwo(winSum: 23)
+       ContentView()
+        //WinSheetTwo(winSum: 23)
         
     }
 }
