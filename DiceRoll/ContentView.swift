@@ -32,35 +32,42 @@ struct ContentView: View {
         
         // MARK: - BODY
         VStack {
-            
-            Text("\(sumOne)")
+            HStack{
+            Text("Player one : \(sumOne)")
                   .font(.title)
-                  .foregroundColor(.green)
-                  .fontWeight(.bold)
-              Spacer()
-              
-              Text("\(sumTwo)")
+                  .foregroundColor(.white)
+                  .fontWeight(.semibold)
+                  .padding()
+             
+                }
+            HStack{
+              Text("Player two : \(sumTwo)")
                     .font(.title)
-                    .foregroundColor(.green)
-                    .fontWeight(.bold)
-                Spacer()
-           
+                    .foregroundColor(.white)
+                    .fontWeight(.semibold)
+                    .padding()
+                
+                }
+            Spacer()
             HStack{
                 // skapar en tärning från  structen diceview
                 // med dessa kan du skapa hur många tärningar du vill utan att ska flera image filer.
+        
+                
                 DiceView(n: diceOne)
                 DiceView(n: diceTwo)
-                
-            }.onAppear(){
+                       }.onAppear(){
                 //när appen startar slumpas tärningens värde utan att du behöver trycka någonstans
                 newValueOnDiceTwo()
                 newValueOnDiceOne()
                 
             }
+            Spacer()
+            
             Button (action:{
                 // kallar på tärnings funktionen när knappen trycks
                 rollDiceOne()
-                
+                rollDiceTwo()
                 
             }, label: {
                 Text("Roll Dice Player One")
@@ -69,9 +76,9 @@ struct ContentView: View {
                     .padding()
             })
             // knappens design
-            .background(Color.red)
+            .background(Color.green)
             .cornerRadius(15.0)
-            Spacer()
+            
              
             
             // knapp för BOT tärningen
@@ -79,7 +86,7 @@ struct ContentView: View {
             Button (action:{
                 // kallar på tärnings funktionen när knappen trycks
                 rollDiceTwo()
-                
+                rollDiceOne()
                 
             }, label: {
                 Text("Roll Dice Player Two")
@@ -88,7 +95,7 @@ struct ContentView: View {
                     .padding()
             })
             // knappens design
-            .background(Color.red)
+            .background(Color.green)
             .cornerRadius(15.0)
             Spacer()
         }
@@ -199,7 +206,7 @@ struct WinSheetOne : View {
     
     var body : some View {
           ZStack{
-            Color(red: 38/256, green: 108/256, blue: 59/256)
+            Color(red: 100/256, green: 20/256, blue: 129/256)
                 .ignoresSafeArea()
             VStack{
                 Text("You won Player 1!")
@@ -209,8 +216,18 @@ struct WinSheetOne : View {
                     .foregroundColor(.red)
                     .font(.title)
              
-            }
             
+              HStack{
+              Image(systemName: "trophy.circle.fill")
+                      
+                      .resizable()
+                      .foregroundColor(.yellow)
+                  .aspectRatio( contentMode: .fit)
+                  .padding()
+                  
+                  }
+                
+                }
         }
         
         
@@ -227,7 +244,7 @@ struct WinSheetTwo : View {
     
     var body : some View {
           ZStack{
-            Color(red: 38/256, green: 108/256, blue: 59/256)
+            Color(red: 38/256, green: 158/256, blue: 595/256)
                 .ignoresSafeArea()
             VStack{
                 Text("You won Player 2!")
@@ -236,8 +253,16 @@ struct WinSheetTwo : View {
                 Text("\(winSum)")
                     .foregroundColor(.red)
                     .font(.title)
-             
-            }
+                HStack{
+                Image(systemName: "trophy.circle.fill")
+                        
+                        .resizable()
+                        .foregroundColor(.yellow)
+                    .aspectRatio( contentMode: .fit)
+                    .padding()
+                    
+                    }
+                }
             
         }
         
@@ -252,7 +277,8 @@ struct WinSheetTwo : View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-       ContentView()
-       // WinSheet(winSum: 23)
+       //ContentView()
+        WinSheetTwo(winSum: 23)
+        
     }
 }
