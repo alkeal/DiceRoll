@@ -17,11 +17,12 @@ struct ContentView: View {
     @State var sumOne = 0
     @State var sumTwo = 0
     @State var winningSum = 21
+   // @State var winSum = 0
     
     // skapa en sheet när någon av tärningar har nått 21 och då ska den veta om det är sant eller falskt.
-    @State var WinSheet = false
-    
-    
+    @State var WinSheetOne = false
+    @State var WinSheetTwo = false
+
     var body: some View {
         
         // bakgrundens färger och egenskaper
@@ -29,7 +30,7 @@ struct ContentView: View {
             Color(red: 38/256, green: 108/256, blue: 59/256)
                 .ignoresSafeArea()
         
-        
+        // MARK: - BODY
         VStack {
             
             Text("\(sumOne)")
@@ -43,7 +44,7 @@ struct ContentView: View {
                     .foregroundColor(.green)
                     .fontWeight(.bold)
                 Spacer()
-            
+           
             HStack{
                 // skapar en tärning från  structen diceview
                 // med dessa kan du skapa hur många tärningar du vill utan att ska flera image filer.
@@ -81,7 +82,7 @@ struct ContentView: View {
                 
                 
             }, label: {
-                Text("Roll Dice")
+                Text("Roll Dice Player Two")
                     .font(.largeTitle)
                     .foregroundColor(Color.white)
                     .padding()
@@ -96,23 +97,30 @@ struct ContentView: View {
     // här slutar Zstack
         
         //  här skapar vi den sheet vi ser när man fått 21 poäng
-        .sheet(isPresented: $WinSheet, onDismiss: {
+        .sheet(isPresented: $WinSheetOne, onDismiss: {
             sumOne = 0
-            sumTwo = 0
         }, content: {
             
-            if (diceOne > winningSum){
-            DiceRoll.WinSheet(winSum: sumOne)
+            
+            DiceRoll.WinSheetOne(winSum: sumOne)
                 
-                }
-            else if (diceTwo > winningSum){
-                DiceRoll.WinSheet(winSum: sumTwo)
-            }
+        
+            
             
         })
         
+        .sheet(isPresented: $WinSheetTwo, onDismiss: {
+            sumTwo = 0
+        }, content: {
+            
+            
+            
+                
         
-        
+            DiceRoll.WinSheetTwo(winSum: sumTwo)
+            
+            
+        })        //:BODY
         
         
         
@@ -125,10 +133,10 @@ struct ContentView: View {
          
         // spelet avslutas när man nåt 21 eller högre och man blir skicka till den nya sidan/sheet
         if (sumOne > winningSum){
-            WinSheet = true
+            WinSheetOne = true
             
-        } else{
-            WinSheet = false
+        } else {
+            WinSheetOne = false
         }
         
     
@@ -143,9 +151,9 @@ struct ContentView: View {
         
         if (sumTwo > winningSum){
             
-            WinSheet = true
+            WinSheetTwo = true
         } else {
-            WinSheet = false
+            WinSheetTwo = false
         }
         
         
@@ -158,7 +166,7 @@ struct ContentView: View {
         diceOne = Int.random(in: 1...6)
         
     }
-    
+    // ----11----
     func newValueOnDiceTwo(){
         diceTwo = Int.random(in: 1...6)
 
@@ -183,10 +191,9 @@ struct DiceView : View {
     
     
 }
-struct WinSheet : View {
+struct WinSheetOne : View {
     
     let winSum : Int
-    //let sumTwo : Int
     
     // En ny sida/sheet har en body
     
@@ -195,7 +202,35 @@ struct WinSheet : View {
             Color(red: 38/256, green: 108/256, blue: 59/256)
                 .ignoresSafeArea()
             VStack{
-                Text("You won!")
+                Text("You won Player 1!")
+                    .foregroundColor(.white)
+                    .font(.title)
+                Text("\(winSum)")
+                    .foregroundColor(.red)
+                    .font(.title)
+             
+            }
+            
+        }
+        
+        
+        
+    }
+    
+    
+}
+struct WinSheetTwo : View {
+    
+    let winSum : Int
+    
+    // En ny sida/sheet har en body
+    
+    var body : some View {
+          ZStack{
+            Color(red: 38/256, green: 108/256, blue: 59/256)
+                .ignoresSafeArea()
+            VStack{
+                Text("You won Player 2!")
                     .foregroundColor(.white)
                     .font(.title)
                 Text("\(winSum)")
@@ -215,11 +250,9 @@ struct WinSheet : View {
 
 
 
-
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-       // ContentView()
-        WinSheet(winSum: 23)
+       ContentView()
+       // WinSheet(winSum: 23)
     }
 }
