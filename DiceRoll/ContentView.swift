@@ -16,6 +16,7 @@ struct ContentView: View {
     
     @State var sumOne = 0
     @State var sumTwo = 0
+    @State var winningSum = 21
     
     // skapa en sheet när någon av tärningar har nått 21 och då ska den veta om det är sant eller falskt.
     @State var WinSheet = false
@@ -51,12 +52,32 @@ struct ContentView: View {
                 
             }.onAppear(){
                 //när appen startar slumpas tärningens värde utan att du behöver trycka någonstans
-                newValueOnDice()
+                newValueOnDiceTwo()
+                newValueOnDiceOne()
                 
             }
             Button (action:{
                 // kallar på tärnings funktionen när knappen trycks
-                rollDice()
+                rollDiceOne()
+                
+                
+            }, label: {
+                Text("Roll Dice Player One")
+                    .font(.largeTitle)
+                    .foregroundColor(Color.white)
+                    .padding()
+            })
+            // knappens design
+            .background(Color.red)
+            .cornerRadius(15.0)
+            Spacer()
+             
+            
+            // knapp för BOT tärningen
+            
+            Button (action:{
+                // kallar på tärnings funktionen när knappen trycks
+                rollDiceTwo()
                 
                 
             }, label: {
@@ -69,8 +90,6 @@ struct ContentView: View {
             .background(Color.red)
             .cornerRadius(15.0)
             Spacer()
-             
-
         }
         
     }
@@ -78,13 +97,17 @@ struct ContentView: View {
         
         //  här skapar vi den sheet vi ser när man fått 21 poäng
         .sheet(isPresented: $WinSheet, onDismiss: {
-            //sumTwo = 0
             sumOne = 0
+            sumTwo = 0
         }, content: {
             
-           // WinSheet(sumTwo: sumTwo)
+            if (diceOne > winningSum){
             DiceRoll.WinSheet(winSum: sumOne)
-            DiceRoll.WinSheet(winSum: sumTwo)
+                
+                }
+            else if (diceTwo > winningSum){
+                DiceRoll.WinSheet(winSum: sumTwo)
+            }
             
         })
         
@@ -94,32 +117,51 @@ struct ContentView: View {
         
         
 }
-    func rollDice(){
+    func rollDiceOne(){
         
-        newValueOnDice()
+        newValueOnDiceOne()
         // visar den specifika tärningens värde och adderar efter varje kast
          sumOne += diceOne
-         sumTwo += diceTwo
+         
         // spelet avslutas när man nåt 21 eller högre och man blir skicka till den nya sidan/sheet
-        if (sumOne > 21){
+        if (sumOne > winningSum){
             WinSheet = true
             
+        } else{
+            WinSheet = false
         }
         
-        if (sumTwo > 21){
+    
+        
+    }
+    
+    func rollDiceTwo(){
+        
+        newValueOnDiceTwo()
+        
+        sumTwo += diceTwo
+        
+        if (sumTwo > winningSum){
             
             WinSheet = true
+        } else {
+            WinSheet = false
         }
+        
         
     }
 
 
     // skapa ett randomiserat nummer på tärningen
-    func newValueOnDice(){
+    func newValueOnDiceOne(){
         
         diceOne = Int.random(in: 1...6)
-        diceTwo = Int.random(in: 1...6)
         
+    }
+    
+    func newValueOnDiceTwo(){
+        diceTwo = Int.random(in: 1...6)
+
     }
         
         
@@ -177,6 +219,7 @@ struct WinSheet : View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+       // ContentView()
+        WinSheet(winSum: 23)
     }
 }
