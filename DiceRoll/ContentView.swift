@@ -16,6 +16,7 @@ struct ContentView: View {
     
     @State var sumOne = 0
     @State var sumTwo = 0
+    
     @State var winningSum = 21
    // @State var winSum = 0
     
@@ -27,24 +28,24 @@ struct ContentView: View {
         
         // bakgrundens färger och egenskaper
         ZStack{
-            Color(red: 38/256, green: 108/256, blue: 59/256)
+        
+            Color(red: 38/256, green: 97/256, blue: 79/256)
                 .ignoresSafeArea()
         
         // MARK: - BODY
         VStack {
             HStack{
-            Text("Player 1 : \(sumOne)")
-                  .font(.title)
-                  .foregroundColor(.white)
-                  .fontWeight(.semibold)
-                  .padding()
+                Text("Player 1 : \(sumOne)")
+                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                    .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .multilineTextAlignment(.center)
+                    .padding([.top, .leading, .trailing])
                 
                 Text("Player 2 : \(sumTwo)")
                       .font(.title)
-                      .foregroundColor(.white)
-                      .fontWeight(.semibold)
-                      .padding()                }
+                      .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                      .multilineTextAlignment(.center)
+                .padding([.top, .leading, .trailing])                }
        
+            Spacer()
             Spacer()
             HStack{
                 // skapar en tärning från  structen diceview
@@ -60,43 +61,78 @@ struct ContentView: View {
                 
             }
             Spacer()
-            
+        
             Button (action:{
                 // kallar på tärnings funktionen när knappen trycks
                 rollDiceOne()
                 rollDiceTwo()
                 
             }, label: {
-                Text("Roll dice player 1")
+                Text("Player 1 Roll Dice")
                     .font(.title)
-                    .foregroundColor(Color.white)
+                    .fontWeight(.regular)
+                    .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))
+                    .multilineTextAlignment(.center)
                     .padding()
+                   
             })
             // knappens design
-            .background(Color.green)
-            .cornerRadius(15.0)
-            
+            .background(Color(hue: 0.414, saturation: 0.01, brightness: 0.091, opacity: 0.705))            .cornerRadius(15.0)
              
-            
+          
             // knapp för BOT tärningen
             
             Button (action:{
                 // kallar på tärnings funktionen när knappen trycks
                 rollDiceTwo()
-                rollDiceOne()
+              //  rollDiceOne()
                 
             }, label: {
-                Text("Roll dice player 2")
+                Text("Player 2 Roll Dice")
                     .font(.title)
-                    .foregroundColor(Color.white)
+                    .fontWeight(.regular)
+                    .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .multilineTextAlignment(.center)
                     .padding()
             })
             // knappens design
-            .background(Color.blue)
+            .background(Color(hue: 0.414, saturation: 0.01, brightness: 0.091, opacity: 0.705))
             .cornerRadius(15.0)
-            Spacer()
+            .padding()
+             Spacer()
         }
-        
+           
+             Button(action: {
+                
+                 
+             }, label: {
+                 VStack{
+                     
+                 Text("Bet on player 1")
+                     .font(.title)
+                     .fontWeight(.thin)
+                     .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .multilineTextAlignment(.leading)
+                     .padding([.top, .bottom, .trailing], 200.0)
+                 Spacer()
+                     
+                 
+                     }
+             })
+            Button(action: {
+               
+                
+            }, label: {
+                VStack{
+                    
+                Text("Bet on player 2")
+                    .font(.title)
+                    .fontWeight(.thin)
+                    .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .multilineTextAlignment(.leading)
+                    .padding([.top, .leading, .bottom], 200.0)
+                Spacer()
+                    
+                
+                    }
+            })
     }
     // här slutar Zstack
         
@@ -209,8 +245,7 @@ struct WinSheetOne : View {
                 .ignoresSafeArea()
             VStack{
                 Text("You won Player 1!")
-                    .foregroundColor(.white)
-                    .font(.title)
+                    .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .font(.title)
                 Text("\(winSum)")
                     .foregroundColor(.red)
                     .font(.title)
@@ -220,8 +255,7 @@ struct WinSheetOne : View {
               Image(systemName: "trophy.circle.fill")
                       
                       .resizable()
-                      .foregroundColor(.yellow)
-                  .aspectRatio( contentMode: .fit)
+                      .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                  .aspectRatio( contentMode: .fit)
                   .padding()
                   
                   }
@@ -243,12 +277,11 @@ struct WinSheetTwo : View {
     
     var body : some View {
           ZStack{
-            Color(red: 38/256, green: 158/256, blue: 595/256)
-                .ignoresSafeArea()
+            Color(red: 100/256, green: 20/256, blue: 129/256)
+                  .ignoresSafeArea()
             VStack{
                 Text("You won Player 2!")
-                    .foregroundColor(.white)
-                    .font(.title)
+                    .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .font(.title)
                 Text("\(winSum)")
                     .foregroundColor(.red)
                     .font(.title)
@@ -256,8 +289,7 @@ struct WinSheetTwo : View {
                 Image(systemName: "trophy.circle.fill")
                         
                         .resizable()
-                        .foregroundColor(.yellow)
-                    .aspectRatio( contentMode: .fit)
+                        .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .aspectRatio( contentMode: .fit)
                     .padding()
                     
                     }
@@ -277,7 +309,7 @@ struct WinSheetTwo : View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
        ContentView()
-        //WinSheetTwo(winSum: 23)
+       // WinSheetTwo(winSum: 23)
         
     }
 }
