@@ -23,6 +23,12 @@ struct ContentView: View {
     // skapa en sheet när någon av tärningar har nått 21 och då ska den veta om det är sant eller falskt.
     @State var WinSheetOne = false
     @State var WinSheetTwo = false
+    
+    
+    @State var BettingSheet = false
+    @State var coinsP1 = 0
+    @State var coinsP2 = 0
+    @State var coinWin = 0
 
     var body: some View {
         
@@ -99,40 +105,46 @@ struct ContentView: View {
             .cornerRadius(15.0)
             .padding()
              Spacer()
-        }
-           
-             Button(action: {
-                
+            
+              Button(action: {
                  
-             }, label: {
-                 VStack{
-                     
-                 Text("Bet on player 1")
-                     .font(.title)
-                     .fontWeight(.thin)
-                     .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .multilineTextAlignment(.leading)
-                     .padding([.top, .bottom, .trailing], 200.0)
-                 Spacer()
-                     
-                 
-                     }
-             })
+                  self.coinsP1 += 1
+                  
+              }, label: {
+                  HStack{
+                      Spacer()
+                  Text("Bet coins on P1 : \(coinsP1)")
+                      .font(.title)
+                      .fontWeight(.regular)
+                      .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))  .multilineTextAlignment(.leading)
+                      .padding(.all,6.5)
+                      .background(Color(hue: 0.414, saturation: 0.01, brightness: 0.091, opacity: 0.705))                      .cornerRadius(20.0);
+                      Spacer()
+                      
+                  
+                      }
+              })
             Button(action: {
                
+                self.coinsP2 += 1
                 
             }, label: {
-                VStack{
-                    
-                Text("Bet on player 2")
+                HStack{
+                   
+                    Text("Bet coins on P2 : \(coinsP2)")
                     .font(.title)
-                    .fontWeight(.thin)
-                    .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .multilineTextAlignment(.leading)
-                    .padding([.top, .leading, .bottom], 200.0)
-                Spacer()
-                    
-                
+                    .fontWeight(.regular)
+                    .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))  .multilineTextAlignment(.leading)
+                    .padding(.all,6.5)
+                    .background(Color(hue: 0.414, saturation: 0.01, brightness: 0.091, opacity: 0.705))                    .cornerRadius(20.0);
                     }
-            })
+                
+             })
+            
+        }
+           
+            
+         
     }
     // här slutar Zstack
         
@@ -142,7 +154,7 @@ struct ContentView: View {
         }, content: {
             
             
-            DiceRoll.WinSheetOne(winSum: sumOne)
+            DiceRoll.WinSheetOne(winSum: sumOne, coinWin: coinsP1)
                 
         
             
@@ -157,17 +169,17 @@ struct ContentView: View {
             
                 
         
-            DiceRoll.WinSheetTwo(winSum: sumTwo)
+            DiceRoll.WinSheetTwo(winSum: sumTwo, coinWin: coinsP2)
             
             
         })        //:BODY
-        
         
         
 }
     func rollDiceOne(){
         
         newValueOnDiceOne()
+        addCoinToBet()
         // visar den specifika tärningens värde och adderar efter varje kast
          sumOne += diceOne
          
@@ -186,6 +198,7 @@ struct ContentView: View {
     func rollDiceTwo(){
         
         newValueOnDiceTwo()
+        addCoinToBet()
         
         sumTwo += diceTwo
         
@@ -210,6 +223,22 @@ struct ContentView: View {
     func newValueOnDiceTwo(){
         diceTwo = Int.random(in: 1...6)
 
+    }
+    
+    func addCoinToBet(){
+        
+        coinsP1 += coinWin
+        coinsP2 += coinWin
+        
+        
+        
+        if (coinsP1 == winningSum){
+            BettingSheet = true
+        } else if ( coinsP2 == winningSum){
+            BettingSheet = true
+        }
+        
+        
     }
         
         
@@ -236,30 +265,36 @@ struct DiceView : View {
 struct WinSheetOne : View {
     
     let winSum : Int
+    let coinWin : Int
     
     // En ny sida/sheet har en body
     
     var body : some View {
-          ZStack{
-            Color(red: 100/256, green: 20/256, blue: 129/256)
+        ZStack{
+          Color(red: 100/256, green: 20/256, blue: 129/256)
                 .ignoresSafeArea()
-            VStack{
-                Text("You won Player 1!")
-                    .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .font(.title)
-                Text("\(winSum)")
-                    .foregroundColor(.red)
-                    .font(.title)
-             
-            
+          VStack{
+              Text("You won Player 1 : \(winSum)")
+                  .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .font(.title)
+                  .padding()
+                  .background(Color(hue: 0.414, saturation: 0.01, brightness: 0.091, opacity: 0.705))
+                  .cornerRadius(15.0)
+                  .padding()
+              
+              Text("Your current coins : \(coinWin)")
+                  .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .multilineTextAlignment(.center)
+                  .padding()
+                  .background(Color(hue: 0.414, saturation: 0.01, brightness: 0.091, opacity: 0.705))
+                  .cornerRadius(15.0)
+                  .padding()
               HStack{
               Image(systemName: "trophy.circle.fill")
                       
                       .resizable()
-                      .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                  .aspectRatio( contentMode: .fit)
+                      .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .aspectRatio( contentMode: .fit)
                   .padding()
                   
                   }
-                
                 }
         }
         
@@ -272,6 +307,7 @@ struct WinSheetOne : View {
 struct WinSheetTwo : View {
     
     let winSum : Int
+    let coinWin : Int
     
     // En ny sida/sheet har en body
     
@@ -280,11 +316,19 @@ struct WinSheetTwo : View {
             Color(red: 100/256, green: 20/256, blue: 129/256)
                   .ignoresSafeArea()
             VStack{
-                Text("You won Player 2!")
+                Text("You won Player 2 : \(winSum)")
                     .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .font(.title)
-                Text("\(winSum)")
-                    .foregroundColor(.red)
-                    .font(.title)
+                    .padding()
+                    .background(Color(hue: 0.414, saturation: 0.01, brightness: 0.091, opacity: 0.705))
+                    .cornerRadius(15.0)
+                    .padding()
+                
+                Text("Your current coins : \(coinWin)")
+                    .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .multilineTextAlignment(.center)
+                    .padding()
+                    .background(Color(hue: 0.414, saturation: 0.01, brightness: 0.091, opacity: 0.705))
+                    .cornerRadius(15.0)
+                    .padding()
                 HStack{
                 Image(systemName: "trophy.circle.fill")
                         
@@ -308,8 +352,7 @@ struct WinSheetTwo : View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-       ContentView()
-       // WinSheetTwo(winSum: 23)
-        
+    ContentView()
+        WinSheetOne(winSum: 23, coinWin: 0)
     }
 }
