@@ -26,8 +26,8 @@ struct ContentView: View {
     
     
     @State var BettingSheet = false
-    @State var coinsP1 = 0
-    @State var coinsP2 = 0
+    @State var coinsP1 = 100
+    @State var coinsP2 = 100
     @State var coinWin = 0
 
     var body: some View {
@@ -117,7 +117,7 @@ struct ContentView: View {
                       .font(.title)
                       .fontWeight(.regular)
                       .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))  .multilineTextAlignment(.leading)
-                      .padding(.all,6.5)
+                      .padding(.all,15)
                       .background(Color(hue: 0.414, saturation: 0.01, brightness: 0.091, opacity: 0.705))                      .cornerRadius(20.0);
                       Spacer()
                       
@@ -135,7 +135,7 @@ struct ContentView: View {
                     .font(.title)
                     .fontWeight(.regular)
                     .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))  .multilineTextAlignment(.leading)
-                    .padding(.all,6.5)
+                    .padding(.all,15)
                     .background(Color(hue: 0.414, saturation: 0.01, brightness: 0.091, opacity: 0.705))                    .cornerRadius(20.0);
                     }
                 
@@ -198,7 +198,7 @@ struct ContentView: View {
     func rollDiceTwo(){
         
         newValueOnDiceTwo()
-        addCoinToBet()
+        //addCoinToBet()
         
         sumTwo += diceTwo
         
@@ -218,28 +218,39 @@ struct ContentView: View {
         
         diceOne = Int.random(in: 1...6)
         
-    }
+        
+        if diceOne > 21 {
+            self.coinsP1 += coinWin * 30
+        } else{
+            self.coinsP1 -= coinWin
+        }    }
+    
     // ----11----
+    
     func newValueOnDiceTwo(){
+        
         diceTwo = Int.random(in: 1...6)
 
-    }
-    
-    func addCoinToBet(){
-        
-        coinsP1 += coinWin
-        coinsP2 += coinWin
-        
-        
-        
-        if (coinsP1 == winningSum){
-            BettingSheet = true
-        } else if ( coinsP2 == winningSum){
-            BettingSheet = true
+        // kolla om du vann coins
+        if diceTwo > 21 {
+            self.coinsP2 += coinWin * 30
+        } else{
+            self.coinsP2 -= coinWin
         }
         
-        
     }
+    
+   func addCoinToBet(){
+       
+       
+        
+       if diceTwo > 21 {
+           self.coinsP2 += coinWin * 10
+       } else{
+           self.coinsP2 -= coinWin
+       }
+        
+   }
         
         
 }
@@ -271,7 +282,7 @@ struct WinSheetOne : View {
     
     var body : some View {
         ZStack{
-          Color(red: 100/256, green: 20/256, blue: 129/256)
+            Color(red: 38/256, green: 97/256, blue: 79/256)
                 .ignoresSafeArea()
           VStack{
               Text("You won Player 1 : \(winSum)")
@@ -281,14 +292,14 @@ struct WinSheetOne : View {
                   .cornerRadius(15.0)
                   .padding()
               
-              Text("Your current coins : \(coinWin)")
+              Text("You won \(coinWin) coins!")
                   .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .multilineTextAlignment(.center)
                   .padding()
                   .background(Color(hue: 0.414, saturation: 0.01, brightness: 0.091, opacity: 0.705))
                   .cornerRadius(15.0)
                   .padding()
               HStack{
-              Image(systemName: "trophy.circle.fill")
+              Image(systemName: "eurosign.circle.fill")
                       
                       .resizable()
                       .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .aspectRatio( contentMode: .fit)
@@ -313,24 +324,24 @@ struct WinSheetTwo : View {
     
     var body : some View {
           ZStack{
-            Color(red: 100/256, green: 20/256, blue: 129/256)
+              Color(red: 38/256, green: 97/256, blue: 79/256)
                   .ignoresSafeArea()
             VStack{
-                Text("You won Player 2 : \(winSum)")
+                Text("You won Player 2 ! This was your score :  \(winSum)")
                     .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .font(.title)
                     .padding()
                     .background(Color(hue: 0.414, saturation: 0.01, brightness: 0.091, opacity: 0.705))
                     .cornerRadius(15.0)
                     .padding()
                 
-                Text("Your current coins : \(coinWin)")
+                Text("You won \(coinWin) coins!")
                     .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .multilineTextAlignment(.center)
                     .padding()
                     .background(Color(hue: 0.414, saturation: 0.01, brightness: 0.091, opacity: 0.705))
                     .cornerRadius(15.0)
                     .padding()
                 HStack{
-                Image(systemName: "trophy.circle.fill")
+                Image(systemName: "eurosign.circle.fill")
                         
                         .resizable()
                         .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .aspectRatio( contentMode: .fit)
@@ -352,7 +363,8 @@ struct WinSheetTwo : View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-    ContentView()
-        WinSheetOne(winSum: 23, coinWin: 0)
+    //ContentView()
+      //  WinSheetOne(winSum: 23, coinWin: 0)
+        WinSheetTwo(winSum: 23, coinWin: 0)
     }
 }
