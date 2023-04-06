@@ -24,11 +24,13 @@ struct ContentView: View {
     @State var WinSheetOne = false
     @State var WinSheetTwo = false
     
-    
+     // var för funktionen med att satsa mynt ska funka
     @State var BettingSheet = false
+    //mynt som spelaren startar med
     @State var coinsP1 = 100
     @State var coinsP2 = 100
-    @State var coinWin = 0
+    // mynt man får vid vinst, och vid varje kast kostar det
+    @State var betCoinAmount = 10
 
     var body: some View {
         
@@ -62,9 +64,9 @@ struct ContentView: View {
                 DiceView(n: diceTwo)
                        }.onAppear(){
                 //när appen startar slumpas tärningens värde utan att du behöver trycka någonstans
-                newValueOnDiceTwo()
-                newValueOnDiceOne()
-                
+               
+                            newValueOnDiceOne()
+                            newValueOnDiceTwo()
             }
             Spacer()
         
@@ -108,7 +110,8 @@ struct ContentView: View {
             
               Button(action: {
                  
-                  self.coinsP1 += 1
+                  // när man trycker på bet knappen ökar insatsen med 100
+                  self.coinsP1 += 100
                   
               }, label: {
                   HStack{
@@ -125,8 +128,8 @@ struct ContentView: View {
                       }
               })
             Button(action: {
-               
-                self.coinsP2 += 1
+                // när man trycker på bet knappen ökar insatsen med 100
+                self.coinsP2 += 100
                 
             }, label: {
                 HStack{
@@ -151,10 +154,13 @@ struct ContentView: View {
         //  här skapar vi den sheet vi ser när man fått 21 poäng
         .sheet(isPresented: $WinSheetOne, onDismiss: {
             sumOne = 0
+            sumTwo = 0
+            // Återställer dina myn till 0 igen efter vunnen omgång
+           // coinsP1 = 0
         }, content: {
             
             
-            DiceRoll.WinSheetOne(winSum: sumOne, coinWin: coinsP1)
+            DiceRoll.WinSheetOne(winSum: sumOne, betCoinAmount:  coinsP1)
                 
         
             
@@ -163,13 +169,15 @@ struct ContentView: View {
         
         .sheet(isPresented: $WinSheetTwo, onDismiss: {
             sumTwo = 0
+            sumOne = 0
+            //Återställer dina myn till 0 igen efter vunnen omgång            //coinsP2 = 0
         }, content: {
             
             
             
                 
         
-            DiceRoll.WinSheetTwo(winSum: sumTwo, coinWin: coinsP2)
+            DiceRoll.WinSheetTwo(winSum: sumTwo, betCoinAmount:  coinsP2)
             
             
         })        //:BODY
@@ -179,7 +187,6 @@ struct ContentView: View {
     func rollDiceOne(){
         
         newValueOnDiceOne()
-        addCoinToBet()
         // visar den specifika tärningens värde och adderar efter varje kast
          sumOne += diceOne
          
@@ -187,18 +194,17 @@ struct ContentView: View {
         if (sumOne > winningSum){
             WinSheetOne = true
             
+            
         } else if (sumOne < winningSum) {
             WinSheetOne = false
         }
         
-    
-        
+      
     }
     
     func rollDiceTwo(){
         
-        newValueOnDiceTwo()
-        //addCoinToBet()
+      newValueOnDiceTwo()
         
         sumTwo += diceTwo
         
@@ -218,40 +224,34 @@ struct ContentView: View {
         
         diceOne = Int.random(in: 1...6)
         
-        
+        // DE MYNT DU SATSAR KOMMER FÖLJ MED DIG VID EN VINST
+
         if diceOne > 21 {
-            self.coinsP1 += coinWin * 30
+            self.coinsP1 += betCoinAmount * 10
         } else{
-            self.coinsP1 -= coinWin
-        }    }
+            self.coinsP1 -= betCoinAmount
+            
+        }
+    }
     
     // ----11----
     
     func newValueOnDiceTwo(){
         
         diceTwo = Int.random(in: 1...6)
+      
+        // DE MYNT DU SATSAR KOMMER FÖLJ MED DIG VID EN VINST
 
-        // kolla om du vann coins
         if diceTwo > 21 {
-            self.coinsP2 += coinWin * 30
-        } else{
-            self.coinsP2 -= coinWin
-        }
-        
+            self.coinsP2 += betCoinAmount * 10
+         } else{
+             self.coinsP2 -= betCoinAmount
+         }
     }
     
-   func addCoinToBet(){
-       
-       
-        
-       if diceTwo > 21 {
-           self.coinsP2 += coinWin * 10
-       } else{
-           self.coinsP2 -= coinWin
-       }
-        
-   }
-        
+    
+
+    
         
 }
 
@@ -276,7 +276,7 @@ struct DiceView : View {
 struct WinSheetOne : View {
     
     let winSum : Int
-    let coinWin : Int
+    let betCoinAmount : Int
     
     // En ny sida/sheet har en body
     
@@ -292,7 +292,7 @@ struct WinSheetOne : View {
                   .cornerRadius(15.0)
                   .padding()
               
-              Text("You won \(coinWin) coins!")
+              Text("You won \(betCoinAmount) coins!")
                   .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .multilineTextAlignment(.center)
                   .padding()
                   .background(Color(hue: 0.414, saturation: 0.01, brightness: 0.091, opacity: 0.705))
@@ -318,7 +318,7 @@ struct WinSheetOne : View {
 struct WinSheetTwo : View {
     
     let winSum : Int
-    let coinWin : Int
+    let betCoinAmount : Int
     
     // En ny sida/sheet har en body
     
@@ -334,7 +334,7 @@ struct WinSheetTwo : View {
                     .cornerRadius(15.0)
                     .padding()
                 
-                Text("You won \(coinWin) coins!")
+                Text("You won \(betCoinAmount) coins!")
                     .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .multilineTextAlignment(.center)
                     .padding()
                     .background(Color(hue: 0.414, saturation: 0.01, brightness: 0.091, opacity: 0.705))
@@ -344,8 +344,9 @@ struct WinSheetTwo : View {
                 Image(systemName: "eurosign.circle.fill")
                         
                         .resizable()
-                        .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .aspectRatio( contentMode: .fit)
-                    .padding()
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundColor(Color(hue: 0.323, saturation: 0.413, brightness: 0.861))                    .padding()
+                       
                     
                     }
                 }
@@ -364,7 +365,7 @@ struct WinSheetTwo : View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
     //ContentView()
-      //  WinSheetOne(winSum: 23, coinWin: 0)
-        WinSheetTwo(winSum: 23, coinWin: 0)
+      //  WinSheetOne(winSum: 23, betCoinAmount: 0)
+        WinSheetTwo(winSum: 23, betCoinAmount: 0)
     }
 }
